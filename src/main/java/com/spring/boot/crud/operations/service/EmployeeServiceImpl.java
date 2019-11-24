@@ -6,6 +6,7 @@ import com.spring.boot.crud.operations.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
@@ -26,17 +27,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeById(@NotNull Long employeeId) throws ResourceNotFoundException {
+    public Employee getEmployeeById(Long employeeId) throws ResourceNotFoundException {
         return getEmployee(employeeId);
     }
 
     @Override
-    public Employee createEmployee(@NotNull Employee employee) {
+    public Employee createEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee updateEmployee(@NotNull Long employeeId, @NotNull Employee employeeDetails) throws ResourceNotFoundException {
+    public Employee updateEmployee(Long employeeId, Employee employeeDetails) throws ResourceNotFoundException {
         Employee employee = getEmployee(employeeId);
 
         employee.setEmailId(employeeDetails.getEmailId());
@@ -46,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Map<String, Boolean> deleteEmployee(@NotNull Long employeeId) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteEmployee(Long employeeId) throws ResourceNotFoundException {
         Employee employee = getEmployee(employeeId);
 
         employeeRepository.delete(employee);
@@ -54,6 +55,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
+//    @Override
+//    public List<Employee> getEmployeesByNom(String employeeNom) {
+//        return employeeRepository.findByNom(employeeNom);
+//    }
 
     private Employee getEmployee(Long employeeId) throws ResourceNotFoundException {
         return employeeRepository.findById(employeeId)
