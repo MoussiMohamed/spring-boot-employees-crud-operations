@@ -21,4 +21,5 @@ public interface EmployeeService {
 
     List<Employee> getEmployeeByNameContaining(@NotEmpty String employeeNom);
 
+    List<Employee> findByLastEmailPart(@NotEmpty String lastEmailPart);
 }

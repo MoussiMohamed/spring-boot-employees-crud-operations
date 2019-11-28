@@ -65,4 +65,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
     }
+
+    @Override
+    public List<Employee> findByLastEmailPart(String lastEmailPart) {
+        return employeeRepository.findByLastEmailPart(lastEmailPart);
+    }
+
 }

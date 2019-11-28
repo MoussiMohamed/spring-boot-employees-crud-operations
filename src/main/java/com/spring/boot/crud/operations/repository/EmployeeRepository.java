@@ -14,4 +14,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("SELECT emp FROM Employee emp WHERE emp.firstName like %?1%")
     List<Employee> findByNameContaining(String nom);
 
+    @Query("SELECT emp FROM Employee emp WHERE emp.emailId like %?1")
+    List<Employee> findByLastEmailPart(String lastPartOfEmail);
+
 }

@@ -30,9 +30,14 @@ public class EmployeeController {
         return ResponseEntity.ok().body(employeeService.getEmployeeById(employeeId));
     }
 
-    @GetMapping("/employees/search/{nom}")
+    @GetMapping("/employees/containingsearch/{nom}")
     public List<Employee> getEmployeeByNom(@PathVariable(value = "nom") String employeeNom) {
         return employeeService.getEmployeeByNameContaining(employeeNom);
+    }
+
+    @GetMapping("/employees/endsbysearch/{lastEmailPart}")
+    public List<Employee> getEmployeeByNameContaining(@PathVariable(value = "lastEmailPart") String lastEmailPart) {
+        return employeeService.findByLastEmailPart(lastEmailPart);
     }
 
     @PostMapping("/employees")
