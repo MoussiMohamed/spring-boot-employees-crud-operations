@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service(value = "employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
@@ -28,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployeeById(Long employeeId) throws ResourceNotFoundException {
-        return getEmployee(employeeId);
+        return getEmployee(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee updateEmployee(Long employeeId, Employee employeeDetails) throws ResourceNotFoundException {
-        Employee employee = getEmployee(employeeId);
+        Employee employee = getEmployee(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
 
         employee.setEmailId(employeeDetails.getEmailId());
         employee.setLastName(employeeDetails.getLastName());
@@ -47,12 +48,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Map<String, Boolean> deleteEmployee(Long employeeId) throws ResourceNotFoundException {
-        Employee employee = getEmployee(employeeId);
+    public Map<String, Boolean> deleteEmployee(Long employeeId) {
+        Optional<Employee> employee = getEmployee(employeeId);
 
-        employeeRepository.delete(employee);
         Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
+        if (employee.isPresent()) {
+            employeeRepository.delete(employee.get());
+            response.put("deleted", Boolean.TRUE);
+        }
         return response;
     }
 
@@ -61,9 +64,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findByNameContaining(employeeNom);
     }
 
-    private Employee getEmployee(Long employeeId) throws ResourceNotFoundException {
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + employeeId));
+    private Optional<Employee> getEmployee(Long employeeId) {
+        return employeeRepository.findById(employeeId);
     }
 
     @Override

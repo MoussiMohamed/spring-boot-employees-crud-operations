@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 @CrossOrigin
@@ -27,7 +28,12 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") Long employeeId) throws ResourceNotFoundException {
-        return ResponseEntity.ok().body(employeeService.getEmployeeById(employeeId));
+        Optional<Employee> employee = Optional.ofNullable(employeeService.getEmployeeById(employeeId));
+        ResponseEntity<Employee> responseEntity = null;
+        if (employee.isPresent()) {
+            responseEntity = ResponseEntity.ok().body(employee.get());
+        }
+        return responseEntity;
     }
 
     @GetMapping("/employees/containingsearch/{nom}")
