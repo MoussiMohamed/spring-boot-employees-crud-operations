@@ -56,10 +56,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return response;
     }
 
-//    @Override
-//    public List<Employee> getEmployeesByNom(String employeeNom) {
-//        return employeeRepository.findByNom(employeeNom);
-//    }
+    @Override
+    public List<Employee> getEmployeeByNameContaining(String employeeNom) {
+        return employeeRepository.findByNameContaining(employeeNom);
+    }
 
     private Employee getEmployee(Long employeeId) throws ResourceNotFoundException {
         return employeeRepository.findById(employeeId)

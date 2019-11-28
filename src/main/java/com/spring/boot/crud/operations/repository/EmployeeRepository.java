@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-//    @Query("select emp from Employee emp where emp.firstName like %?1")
-//    List<Employee> findByNom(String nom);
+    @Query("SELECT emp FROM Employee emp WHERE emp.firstName like %?1%")
+    List<Employee> findByNameContaining(String nom);
 
 }

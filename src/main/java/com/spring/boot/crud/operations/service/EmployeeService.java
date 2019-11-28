@@ -19,6 +19,6 @@ public interface EmployeeService {
 
     Map<String, Boolean> deleteEmployee(@NotNull Long employeeId) throws ResourceNotFoundException;
 
-//    List<Employee> getEmployeesByNom(@NotEmpty String employeeNom);
+    List<Employee> getEmployeeByNameContaining(@NotEmpty String employeeNom);
 
 }
