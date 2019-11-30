@@ -1,5 +1,6 @@
 package com.spring.boot.crud.operations.controller;
 
+import com.spring.boot.crud.operations.exception.MohamedException;
 import com.spring.boot.crud.operations.exception.ResourceNotFoundException;
 import com.spring.boot.crud.operations.model.Employee;
 import com.spring.boot.crud.operations.service.EmployeeService;
@@ -7,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 @CrossOrigin
@@ -23,11 +26,16 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+
+        return employeeService.getAllEmployees().parallelStream().map(user -> {
+            user.setFirstName(user.getFirstName() + user.getId());
+            return user;
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") Long employeeId) throws ResourceNotFoundException {
+        employeeService.defaultInterface(employeeId);
         Optional<Employee> employee = Optional.ofNullable(employeeService.getEmployeeById(employeeId));
         ResponseEntity<Employee> responseEntity = null;
         if (employee.isPresent()) {
@@ -47,7 +55,11 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public Employee createEmployee(@Valid @RequestBody Employee employee) {
+    public Employee createEmployee(@Valid @RequestBody Employee employee) throws MohamedException {
+        Optional<Employee> emp = Optional.ofNullable(employeeService.createEmployee(employee));
+        if (emp.isEmpty()) {
+            throw new MohamedException();
+        }
         return employeeService.createEmployee(employee);
     }
 
