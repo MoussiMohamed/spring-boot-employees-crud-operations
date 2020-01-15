@@ -26,7 +26,6 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public List<Employee> getAllEmployees() {
-
         return employeeService.getAllEmployees().parallelStream().map(user -> {
             user.setFirstName(user.getFirstName() + user.getId());
             return user;
@@ -44,7 +43,7 @@ public class EmployeeController {
         return responseEntity;
     }
 
-    @GetMapping("/employees/containingsearch/{nom}")
+    @GetMapping("/employees/containssearch/{nom}")
     public List<Employee> getEmployeeByNom(@PathVariable(value = "nom") String employeeNom) {
         return employeeService.getEmployeeByNameContaining(employeeNom);
     }
@@ -60,7 +59,7 @@ public class EmployeeController {
         if (emp.isEmpty()) {
             throw new MohamedException();
         }
-        return employeeService.createEmployee(employee);
+        return emp.get();
     }
 
     @PutMapping("/employees/{id}")

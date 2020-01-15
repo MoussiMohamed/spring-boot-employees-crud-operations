@@ -26,4 +26,5 @@ public interface EmployeeService {
     default void defaultInterface(Long employeeId) {
         System.out.println("This is a default implementation that print a given employee ID : "+ employeeId);
     }
+
 }
