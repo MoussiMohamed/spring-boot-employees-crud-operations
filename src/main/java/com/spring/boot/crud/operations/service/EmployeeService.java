@@ -11,7 +11,7 @@ import java.util.Map;
 public interface EmployeeService {
     List<Employee> getAllEmployees();
 
-    Employee getEmployeeById(@NotNull Long employeeId) throws ResourceNotFoundException;
+    Employee getEmployeeById(Long employeeId) throws ResourceNotFoundException;
 
     Employee createEmployee(@NotNull Employee employee);
 
